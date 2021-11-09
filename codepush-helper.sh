@@ -106,9 +106,10 @@ case ${4} in
     *) ;; # ignore 4th param
 esac
  
+cmd="${1}"
 cmd_android=""
 cmd_ios=""
-case ${1} in
+case $cmd in
     "release")
         commit_log=`git log -1`
         commit_hash=`git rev-parse --short HEAD`
@@ -159,25 +160,28 @@ function deploy() {
 #===================
 function tag_ios() {
     ios_latest_label=`appcenter codepush deployment list --app $app-ios --output json | jq '.[] | select(.name == "'$deploy'") | .latestRelease.label' | sed 's/[^0-9]//g'`
+    git push -d $GIT_REMOTE `git tag | grep -E 'latest/ios'` # clear old tags (remote) - option
+    git tag -d `git tag | grep -E 'latest/ios'` # clear old tags (local) - option
     git tag "latest/ios-$ios_latest_label"
+    git tag | grep -E 'latest/ios' | xargs git push $GIT_REMOTE # push tags (remote) - option
 }
  
 function tag_android() {
     android_latest_label=`appcenter codepush deployment list --app $app-android --output json | jq '.[] | select(.name == "'$deploy'") | .latestRelease.label' | sed 's/[^0-9]//g'`
+    git push -d $GIT_REMOTE `git tag | grep -E 'latest/android'` # clear old tags (remote) - option
+    git tag -d `git tag | grep -E 'latest/android'` # clear old tags (local) - option
     git tag "latest/android-$android_latest_label"
+    git tag | grep -E 'latest/android' | xargs git push $GIT_REMOTE # push tags (remote) - option
 }
  
 function tag() {
-    if [ "$deploy" == "Production" ]; then
-	git fetch $GIT_REMOTE --tags
-        git push -d $GIT_REMOTE `git tag | grep -E 'latest/'` # clear old tags (remote) - option
-        git tag -d `git tag | grep -E 'latest/'` # clear old tags (local) - option
+    if [ "$deploy" == "Production" ] && [ "$cmd" == "release" ]; then
+        git fetch $GIT_REMOTE --tags
         case $target in
             "ios") tag_ios ;;
             "android") tag_android ;;
             *) tag_ios ; tag_android ;;
         esac
-        git tag | grep -E 'latest/' | xargs git push $GIT_REMOTE # push tags (remote) - option
     fi
 }
  
