@@ -57,8 +57,24 @@ function get_project() {
 function join_by { IFS="$1"; shift; echo "$*"; }
  
 function usage() {
+    b="\033[1m" # bold
+    u="\033[4m" # underline
+    e="\033[0m" # normal
+
+    sh="codepush-helper.sh"
+    arg1="command"
+    arg2="project"
+    arg3="target"
     names=$(join_by "|" $(get_names))
-    echo "codepush-helper.sh [release|disable|rollback] [$names] [production|staging]"
+
+    echo "usage:"
+    echo "\t${u}$sh${e} ${b}$arg1${e} ${b}$arg2${e} ${b}$arg3${e} [${b}ios${e}|${b}android${e}]"
+    echo ""
+    echo "commands:"
+    echo "\t${b}$arg1${e}\trelease|disable|rollback"
+    echo "\t${b}$arg2${e}\t$names"
+    echo "\t${b}$arg3${e}\tproduction|staging"
+
     exit
 }
  
