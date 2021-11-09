@@ -79,7 +79,7 @@ function usage() {
 }
  
 # PARAM COUNT CHECK
-if [ ${#} -ne 3 ]; then usage; exit; fi
+if [ ${#} -ne 3 ] && [ ${#} -ne 4 ]; then usage; exit; fi
  
 # VALID NAME CHECK
 current=($(get_project "${2}"))
@@ -103,7 +103,7 @@ target=""
 case ${4} in
     "ios") target="ios" ;;
     "android") target="android" ;;
-    *) ;;
+    *) ;; # ignore 4th param
 esac
  
 cmd_android=""
