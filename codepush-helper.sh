@@ -1,17 +1,10 @@
 #/bin/bash
- 
+
 #===============
-# CONFIGURATIONS
+# CONFIG
 #===============
-TEST=false
- 
-GIT_REMOTE="origin"
- 
-# name, workdir, codepush-app(without '-$platform'),
-P1=("station" "/Users/bokuhe/station-mobile" "codepush-project/station")
-P1=("mirror" "/Users/bokuhe/mirror-mobile-app" "codepush-project/mirror")
-PROJECTS=(P1 P2)
- 
+source ./CONFIG
+
 #==========
 # FUNCTIONS
 #==========
