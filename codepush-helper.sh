@@ -147,7 +147,7 @@ function deploy_ios() {
 }
  
 function deploy() {
-    case $deploy in
+    case $target in
         "ios") deploy_ios ;;
         "android") deploy_android ;;
         *) deploy_ios ; deploy_android ;;
