@@ -1,6 +1,9 @@
 TEST=false
  
 GIT_REMOTE="origin"
+
+REMOVE_OLD_TAGS=true
+PUSH_TAGS=true
  
 # name, workdir, codepush-app(without '-$platform'),
 P1=("station" "/Users/bokuhe/station-mobile" "codepush-project/station")

@@ -160,18 +160,36 @@ function deploy() {
 #===================
 function tag_ios() {
     ios_latest_label=`appcenter codepush deployment list --app $app-ios --output json | jq '.[] | select(.name == "'$deploy'") | .latestRelease.label' | sed 's/[^0-9]//g'`
-    git push -d $GIT_REMOTE `git tag | grep -E 'latest/ios'` # clear old tags (remote) - option
-    git tag -d `git tag | grep -E 'latest/ios'` # clear old tags (local) - option
+
+    if [ $REMOVE_OLD_TAGS == true ]; then 
+        if [ $PUSH_TAGS == true ]; then
+            git push -d $GIT_REMOTE `git tag | grep -E 'latest/ios'` # clear old tags (remote) - option
+        fi
+        git tag -d `git tag | grep -E 'latest/ios'` # clear old tags (local) - option
+    fi
+
     git tag "latest/ios-$ios_latest_label"
-    git tag | grep -E 'latest/ios' | xargs git push $GIT_REMOTE # push tags (remote) - option
+
+    if [ $PUSH_TAGS == true ]; then
+        git tag | grep -E 'latest/ios' | xargs git push $GIT_REMOTE # push tags (remote) - option
+    fi
 }
  
 function tag_android() {
     android_latest_label=`appcenter codepush deployment list --app $app-android --output json | jq '.[] | select(.name == "'$deploy'") | .latestRelease.label' | sed 's/[^0-9]//g'`
-    git push -d $GIT_REMOTE `git tag | grep -E 'latest/android'` # clear old tags (remote) - option
-    git tag -d `git tag | grep -E 'latest/android'` # clear old tags (local) - option
+
+    if [ $REMOVE_OLD_TAGS == true ]; then 
+        if [ $PUSH_TAGS == true ]; then
+            git push -d $GIT_REMOTE `git tag | grep -E 'latest/android'` # clear old tags (remote) - option
+	    fi
+        git tag -d `git tag | grep -E 'latest/android'` # clear old tags (local) - option
+    fi
+
     git tag "latest/android-$android_latest_label"
-    git tag | grep -E 'latest/android' | xargs git push $GIT_REMOTE # push tags (remote) - option
+
+    if [ $PUSH_TAGS == true ]; then
+        git tag | grep -E 'latest/android' | xargs git push $GIT_REMOTE # push tags (remote) - option
+    fi
 }
  
 function tag() {
