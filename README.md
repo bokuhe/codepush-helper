@@ -17,12 +17,9 @@ Utility script to make codepush deploy
 ## Usage
 
 1. Clone repo
-2. Add project settings to 'codepush-helper.sh'
+2. Set project settings to 'CONFIG' file
 
 ```
-#===============
-# CONFIGURATIONS
-#===============
 TEST=false
 
 GIT_REMOTE="origin"
